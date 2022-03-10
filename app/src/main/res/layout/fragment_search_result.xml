@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainWhite"
+    android:orientation="vertical"
     android:padding="10dp"
     tools:context=".ui.fragments.SearchResultFragment">
 
@@ -22,8 +24,9 @@
             android:layout_weight="1"
             android:background="@drawable/edittext_search_background"
             android:drawableEnd="@drawable/ic_camera"
-            android:focusable="false"
             android:hint="Search for ideas"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
             android:padding="8dp"
             android:textColor="@color/black"
             android:textColorHint="#90000000" />
@@ -40,6 +43,12 @@
 
     </LinearLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSearchPhotos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="10dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

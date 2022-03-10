@@ -9,11 +9,11 @@ import com.example.pinterest.R
 import com.example.pinterest.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

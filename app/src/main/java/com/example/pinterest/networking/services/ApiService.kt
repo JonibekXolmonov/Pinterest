@@ -1,6 +1,7 @@
 package com.example.pinterest.networking.services
 
 import com.example.pinterest.model.homephoto.HomePhotoItem
+import com.example.pinterest.model.search.ResponseSearch
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -19,6 +20,10 @@ interface ApiService {
     fun getSelectedPhoto(@Path("id") id: String): Call<HomePhotoItem>
 
     @GET("search/photos?")
-    fun searchPhotos(@Query("query") query: String)
+    fun searchPhotos(
+        @Query("query") query: String,
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int
+    ): Call<ResponseSearch>
 
 }

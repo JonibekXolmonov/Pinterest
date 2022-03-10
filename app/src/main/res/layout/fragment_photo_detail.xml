@@ -13,10 +13,10 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
+            android:id="@+id/llWrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/llWrapper">
+            android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -34,13 +34,21 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <ImageView
+                        <com.jsibbold.zoomage.ZoomageView
                             android:id="@+id/ivDetailPhoto"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:adjustViewBounds="true"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/img_places" />
+                            android:src="@drawable/img_places"
+                            app:zoomage_animateOnReset="true"
+                            app:zoomage_autoCenter="true"
+                            app:zoomage_autoResetMode="UNDER"
+                            app:zoomage_maxScale="8"
+                            app:zoomage_minScale="0.6"
+                            app:zoomage_restrictBounds="false"
+                            app:zoomage_translatable="true"
+                            app:zoomage_zoomable="true" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
@@ -123,17 +131,6 @@
                             android:textColor="@color/black" />
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/tvDescription"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:paddingHorizontal="10dp"
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -143,6 +140,7 @@
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
+                            android:layout_marginStart="8dp"
                             android:src="@drawable/ic_comment"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -161,9 +159,11 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="4dp"
                                 android:background="@drawable/textview_background"
-                                android:padding="10dp"
+                                android:padding="16dp"
+                                android:paddingHorizontal="4dp"
                                 android:text="View"
-                                android:textColor="@color/black" />
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
 
                             <TextView
                                 android:id="@+id/tvSave"
@@ -171,9 +171,11 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="4dp"
                                 android:background="@drawable/textview_background_red"
-                                android:padding="10dp"
+                                android:padding="16dp"
+                                android:paddingHorizontal="4dp"
                                 android:text="Save"
-                                android:textColor="@color/mainWhite" />
+                                android:textColor="@color/mainWhite"
+                                android:textSize="16sp" />
 
                         </LinearLayout>
 
@@ -182,6 +184,7 @@
                             android:id="@+id/ivShare"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
+                            android:layout_marginEnd="8dp"
                             android:src="@drawable/ic_share"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -313,8 +316,8 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <include
-        android:id="@+id/bottomSheetMore"
-        layout="@layout/bottom_sheet_more"/>
+        <include
+            android:id="@+id/bottomSheetMore"
+            layout="@layout/bottom_sheet_more" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
