@@ -28,6 +28,7 @@
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:padding="8dp"
+            android:singleLine="true"
             android:textColor="@color/black"
             android:textColorHint="#90000000" />
 

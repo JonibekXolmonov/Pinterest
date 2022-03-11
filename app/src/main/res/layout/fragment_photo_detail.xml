@@ -316,8 +316,8 @@
 
     </androidx.core.widget.NestedScrollView>
 
-        <include
-            android:id="@+id/bottomSheetMore"
-            layout="@layout/bottom_sheet_more" />
+    <include
+        android:id="@+id/bottomSheetMore"
+        layout="@layout/bottom_sheet_more" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

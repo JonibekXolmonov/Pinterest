@@ -1,4 +1,4 @@
-package com.example.pinterest.ui.fragments.helper
+package com.example.pinterest.helper
 
 import android.graphics.Rect
 import android.view.View

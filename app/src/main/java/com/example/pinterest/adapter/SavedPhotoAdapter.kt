@@ -1,6 +1,5 @@
 package com.example.pinterest.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,26 +7,26 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pinterest.R
+import com.example.pinterest.database.Saved
 import com.example.pinterest.model.homephoto.HomePhotoItem
-import com.example.pinterest.model.search.ResponseSearch
 import com.example.pinterest.model.search.Result
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import java.lang.Exception
 
-class SearchPhotoAdapter() :
-    RecyclerView.Adapter<SearchPhotoAdapter.HomePhotoVH>() {
+class SavedPhotoAdapter() :
+    RecyclerView.Adapter<SavedPhotoAdapter.SavedPhotoVH>() {
 
-    private var photos: ArrayList<Result> = ArrayList()
-    lateinit var photoClick: ((Result) -> Unit)
+    private var photos: ArrayList<Saved> = ArrayList()
+    lateinit var photoClick: ((Saved) -> Unit)
 
-    inner class HomePhotoVH(private val view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(photo: Result) {
+    inner class SavedPhotoVH(private val view: View) : RecyclerView.ViewHolder(view) {
+        fun bind(photo: Saved) {
             val ivHomePhoto: ImageView = view.findViewById(R.id.ivHomePhoto)
             val tvHomePhotoTitle: TextView = view.findViewById(R.id.tvHomePhotoTitle)
 
             Picasso.get()
-                .load(photo.urls.regular)
+                .load(photo.url)
                 .into(ivHomePhoto, object : Callback {
                     override fun onSuccess() {
                         if (photo.description != null) {
@@ -43,33 +42,27 @@ class SearchPhotoAdapter() :
             ivHomePhoto.setOnClickListener {
                 photoClick.invoke(photo)
             }
-
         }
     }
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomePhotoVH {
-        return HomePhotoVH(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SavedPhotoVH {
+        return SavedPhotoVH(
             LayoutInflater.from(parent.context).inflate(R.layout.item_home_photo, parent, false)
         )
     }
 
-    override fun onBindViewHolder(holder: HomePhotoVH, position: Int) {
+    override fun onBindViewHolder(holder: SavedPhotoVH, position: Int) {
         holder.bind(getItem(position))
 
     }
 
-    fun submitData(list: List<Result>){
+    fun submitData(list: List<Saved>) {
         photos.addAll(list)
         notifyDataSetChanged()
     }
 
-    fun clearList(){
-        photos.clear()
-        notifyDataSetChanged()
-    }
-
-    private fun getItem(position: Int): Result = photos[position]
+    private fun getItem(position: Int): Saved = photos[position]
 
     override fun getItemCount(): Int = photos.size
 }

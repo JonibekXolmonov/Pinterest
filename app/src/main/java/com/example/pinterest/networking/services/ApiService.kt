@@ -2,6 +2,7 @@ package com.example.pinterest.networking.services
 
 import com.example.pinterest.model.homephoto.HomePhotoItem
 import com.example.pinterest.model.search.ResponseSearch
+import com.example.pinterest.model.userprofile.User
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -26,4 +27,6 @@ interface ApiService {
         @Query("per_page") perPage: Int
     ): Call<ResponseSearch>
 
+    @GET("users/{username}")
+    fun getUser(@Path("username") username: String): Call<User>
 }

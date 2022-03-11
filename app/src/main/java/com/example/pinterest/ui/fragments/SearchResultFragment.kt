@@ -9,6 +9,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -21,7 +22,7 @@ import com.example.pinterest.model.search.ResponseSearch
 import com.example.pinterest.model.search.Result
 import com.example.pinterest.networking.ApiClient
 import com.example.pinterest.networking.services.ApiService
-import com.example.pinterest.ui.fragments.helper.SpaceItemDecoration
+import com.example.pinterest.helper.SpaceItemDecoration
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -90,7 +91,22 @@ class SearchResultFragment : Fragment(R.layout.fragment_search_result) {
 
         addLoadingMore()
 
+        controlClick()
+
         doCancelAction()
+    }
+
+    private fun controlClick() {
+        searchPhotoAdapter.photoClick = {
+            navController.navigate(
+                R.id.action_searchResultFragment_to_photoDetailFragment,
+                bundleOf(
+                    "photoID" to it.id,
+                    "photoUrl" to it.urls.regular,
+                    "description" to it.description
+                )
+            )
+        }
     }
 
     override fun onResume() {
@@ -114,7 +130,7 @@ class SearchResultFragment : Fragment(R.layout.fragment_search_result) {
         rvSearchPhotos.addOnScrollListener(scrollListener)
     }
 
-    fun hideKeyboard(activity: Activity, viewToHide: View) {
+    private fun hideKeyboard(activity: Activity, viewToHide: View) {
         val imm = activity
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(viewToHide.windowToken, 0)

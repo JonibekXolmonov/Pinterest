@@ -2,14 +2,8 @@ package com.example.pinterest.ui.fragments
 
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.Context
-import android.content.ContextWrapper
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.os.Environment
 import android.text.Html
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -21,6 +15,8 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pinterest.R
+import com.example.pinterest.database.Saved
+import com.example.pinterest.database.SavedDatabase
 import com.example.pinterest.model.homephoto.HomePhotoItem
 import com.example.pinterest.networking.ApiClient
 import com.example.pinterest.networking.services.ApiService
@@ -28,13 +24,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.imageview.ShapeableImageView
 import com.jsibbold.zoomage.ZoomageView
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
 
 
 class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnClickListener {
@@ -56,10 +48,18 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnCli
     private lateinit var bottomSheetLayout: CoordinatorLayout
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<CoordinatorLayout>
 
+    private lateinit var savedDatabase: SavedDatabase
+    lateinit var imageUrl: String
+    lateinit var imageID: String
+    lateinit var imageDescription: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         apiService = ApiClient(requireContext()).createServiceWithAuth(ApiService::class.java)
+        imageUrl = arguments?.get("photoUrl").toString()
+        imageID = arguments?.get("photoID").toString()
+        imageDescription = arguments?.get("description").toString()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -71,7 +71,7 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnCli
     private fun initViews(view: View) {
         navController = Navigation.findNavController(view)
         ivDetailPhoto = view.findViewById(R.id.ivDetailPhoto)
-        loadImage()
+        loadImage(imageUrl)
 
         ivProfile = view.findViewById(R.id.ivProfile)
         tvUsername = view.findViewById(R.id.tvUsername)
@@ -99,15 +99,14 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnCli
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
         controlBottomSheetAction(bottomSheetLayout)
+
+        savedDatabase = SavedDatabase.getInstance(requireContext())
     }
 
     private fun controlBottomSheetAction(bottomSheetLayout: CoordinatorLayout) {
         val ivCloseBottomSheet: ImageView = bottomSheetLayout.findViewById(R.id.icCloseBottomSheet)
         val tvCopyLink: TextView = bottomSheetLayout.findViewById(R.id.tvCopyLink)
         val tvDownloadImage: TextView = bottomSheetLayout.findViewById(R.id.tvDownloadImage)
-
-        val imageUrl = arguments?.get("photoUrl").toString()
-        val imageID = arguments?.get("photoID").toString()
 
         ivCloseBottomSheet.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -133,12 +132,10 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnCli
         clipboard?.setPrimaryClip(ClipData.newPlainText("", link))
     }
 
-    private fun loadImage() {
-        arguments.let {
-            Picasso.get()
-                .load(it?.get("photoUrl").toString())
-                .into(ivDetailPhoto)
-        }
+    private fun loadImage(imageUrl: String) {
+        Picasso.get()
+            .load(imageUrl)
+            .into(ivDetailPhoto)
     }
 
     private fun setLoaderProfile() {
@@ -183,8 +180,12 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnCli
 
             }
             R.id.tvSave -> {
-
+                savedToDatabase(imageID, imageUrl, imageDescription)
             }
         }
+    }
+
+    private fun savedToDatabase(imageID: String, imageUrl: String, imageDescription: String) {
+        savedDatabase.savedDao().insertProduct(Saved(imageID, imageUrl, imageDescription))
     }
 }

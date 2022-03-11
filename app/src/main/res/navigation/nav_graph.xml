@@ -32,7 +32,11 @@
         android:id="@+id/profileFragment"
         android:name="com.example.pinterest.ui.fragments.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_photoDetailFragment"
+            app:destination="@id/photoDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.pinterest.ui.fragments.SearchFragment"
@@ -50,6 +54,9 @@
         <action
             android:id="@+id/action_searchResultFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_searchResultFragment_to_photoDetailFragment"
+            app:destination="@id/photoDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/photoDetailFragment"
@@ -59,5 +66,8 @@
         <action
             android:id="@+id/action_photoDetailFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_photoDetailFragment_self"
+            app:destination="@id/photoDetailFragment" />
     </fragment>
 </navigation>

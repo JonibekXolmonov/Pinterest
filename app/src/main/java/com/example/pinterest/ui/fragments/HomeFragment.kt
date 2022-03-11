@@ -15,7 +15,7 @@ import com.example.pinterest.helper.EndlessRecyclerViewScrollListener
 import com.example.pinterest.model.homephoto.HomePhotoItem
 import com.example.pinterest.networking.ApiClient
 import com.example.pinterest.networking.services.ApiService
-import com.example.pinterest.ui.fragments.helper.SpaceItemDecoration
+import com.example.pinterest.helper.SpaceItemDecoration
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -75,7 +75,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         homePhotoAdapter.photoClick = {
             navController.navigate(
                 R.id.action_homeFragment_to_photoDetailFragment,
-                bundleOf("photoID" to it.id, "photoUrl" to it.urls.regular)
+                bundleOf("photoID" to it.id, "photoUrl" to it.urls.regular,"description" to it.description)
             )
         }
     }
