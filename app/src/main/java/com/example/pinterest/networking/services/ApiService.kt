@@ -1,6 +1,7 @@
 package com.example.pinterest.networking.services
 
 import com.example.pinterest.model.homephoto.HomePhotoItem
+import com.example.pinterest.model.relatedcollection.SinglePhoto
 import com.example.pinterest.model.search.ResponseSearch
 import com.example.pinterest.model.userprofile.User
 import retrofit2.Call
@@ -29,4 +30,7 @@ interface ApiService {
 
     @GET("users/{username}")
     fun getUser(@Path("username") username: String): Call<User>
+
+    @GET("photos/{id}")
+    fun getImageToRelated(@Path("id") id: String): Call<SinglePhoto>
 }

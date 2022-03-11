@@ -1,5 +1,7 @@
 package com.example.pinterest.adapter
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +30,7 @@ class HomePhotoAdapter(var photos: ArrayList<HomePhotoItem>) :
 
             Picasso.get()
                 .load(photo.urls.regular)
+                .placeholder(ColorDrawable(Color.parseColor(photo.color)))
                 .into(ivHomePhoto, object : Callback {
                     override fun onSuccess() {
                         if (photo.description != null) {

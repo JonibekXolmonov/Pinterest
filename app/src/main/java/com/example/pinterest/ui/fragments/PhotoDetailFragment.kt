@@ -4,20 +4,27 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.pinterest.R
+import com.example.pinterest.adapter.SearchPhotoAdapter
 import com.example.pinterest.database.Saved
 import com.example.pinterest.database.SavedDatabase
+import com.example.pinterest.helper.SpaceItemDecoration
 import com.example.pinterest.model.homephoto.HomePhotoItem
+import com.example.pinterest.model.relatedcollection.SinglePhoto
+import com.example.pinterest.model.search.ResponseSearch
 import com.example.pinterest.networking.ApiClient
 import com.example.pinterest.networking.services.ApiService
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -31,19 +38,25 @@ import retrofit2.Response
 
 class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnClickListener {
 
+    private lateinit var apiService: ApiService
+
     private lateinit var ivDetailPhoto: ZoomageView
     private lateinit var ivProfile: ShapeableImageView
     private lateinit var tvUsername: TextView
     private lateinit var tvNumFollowers: TextView
     private lateinit var tvSave: TextView
     private lateinit var tvComment: TextView
-    private lateinit var apiService: ApiService
     private lateinit var ivBack: ImageView
     private lateinit var ivMore: ImageView
     private lateinit var ivShare: ImageView
     private lateinit var navController: NavController
 
     private lateinit var rvLikeThis: RecyclerView
+    private lateinit var staggeredGridLayoutManager: StaggeredGridLayoutManager
+    var relatedPhotoAdapter = SearchPhotoAdapter()
+
+    private var PAGE = 1
+    private var PER_PAGE = 20
 
     private lateinit var bottomSheetLayout: CoordinatorLayout
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<CoordinatorLayout>
@@ -87,6 +100,16 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnCli
         tvSave = view.findViewById(R.id.tvSave)
 
         rvLikeThis = view.findViewById(R.id.rvLikeThis)
+        staggeredGridLayoutManager =
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        rvLikeThis.layoutManager = staggeredGridLayoutManager
+        rvLikeThis.addItemDecoration(SpaceItemDecoration(20))
+        relatedPhotoAdapter = SearchPhotoAdapter()
+        rvLikeThis.adapter = relatedPhotoAdapter
+
+        getRelated()
+        controlClick()
+
 
         ivBack.setOnClickListener(this)
         ivMore.setOnClickListener(this)
@@ -101,6 +124,51 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnCli
         controlBottomSheetAction(bottomSheetLayout)
 
         savedDatabase = SavedDatabase.getInstance(requireContext())
+    }
+
+    private fun controlClick() {
+        relatedPhotoAdapter.photoClick = {
+            navController.navigate(
+                R.id.action_photoDetailFragment_self,
+                bundleOf(
+                    "photoID" to it.id,
+                    "photoUrl" to it.urls.regular,
+                    "description" to it.description
+                )
+            )
+        }
+    }
+
+    private fun getRelated() {
+        apiService.getImageToRelated(imageID).enqueue(object : Callback<SinglePhoto> {
+            override fun onResponse(call: Call<SinglePhoto>, response: Response<SinglePhoto>) {
+                val tags = response.body()!!.related_collections.results[0].tags
+                var query = ""
+                for (i in 0 until tags.size - 1)
+                    query += tags[i].title + " "
+
+                getSearchResults(query.trim())
+            }
+
+            override fun onFailure(call: Call<SinglePhoto>, t: Throwable) {
+                Log.d("TAG", "onFailure: ${t.localizedMessage}")
+            }
+        })
+    }
+
+    private fun getSearchResults(query: String) {
+        apiService.searchPhotos(query, PAGE++, PER_PAGE)
+            .enqueue(object : Callback<ResponseSearch> {
+                override fun onResponse(
+                    call: Call<ResponseSearch>,
+                    response: Response<ResponseSearch>
+                ) {
+                    relatedPhotoAdapter.submitData(response.body()!!.results)
+                }
+
+                override fun onFailure(call: Call<ResponseSearch>, t: Throwable) {
+                }
+            })
     }
 
     private fun controlBottomSheetAction(bottomSheetLayout: CoordinatorLayout) {
