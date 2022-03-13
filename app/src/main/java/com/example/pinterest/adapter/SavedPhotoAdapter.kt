@@ -27,17 +27,11 @@ class SavedPhotoAdapter() :
 
             Picasso.get()
                 .load(photo.url)
-                .into(ivHomePhoto, object : Callback {
-                    override fun onSuccess() {
-                        if (photo.description.isNotBlank()) {
-                            tvHomePhotoTitle.text = photo.description
-                        }
-                    }
+                .into(ivHomePhoto)
 
-                    override fun onError(e: Exception?) {
-
-                    }
-                })
+            if (photo.description.isNotBlank()) {
+                tvHomePhotoTitle.text = photo.description
+            }
 
             ivHomePhoto.setOnClickListener {
                 photoClick.invoke(photo)

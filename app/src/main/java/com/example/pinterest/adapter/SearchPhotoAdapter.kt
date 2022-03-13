@@ -1,5 +1,7 @@
 package com.example.pinterest.adapter
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -28,6 +30,7 @@ class SearchPhotoAdapter() :
 
             Picasso.get()
                 .load(photo.urls.regular)
+                .placeholder(ColorDrawable(Color.parseColor(photo.color)))
                 .into(ivHomePhoto, object : Callback {
                     override fun onSuccess() {
                         if (photo.description != null) {
@@ -59,12 +62,12 @@ class SearchPhotoAdapter() :
 
     }
 
-    fun submitData(list: List<Result>){
+    fun submitData(list: List<Result>) {
         photos.addAll(list)
         notifyDataSetChanged()
     }
 
-    fun clearList(){
+    fun clearList() {
         photos.clear()
         notifyDataSetChanged()
     }

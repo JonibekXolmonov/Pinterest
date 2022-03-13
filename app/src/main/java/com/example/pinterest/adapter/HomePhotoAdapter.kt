@@ -2,12 +2,15 @@ package com.example.pinterest.adapter
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.pinterest.R
 import com.example.pinterest.model.homephoto.HomePhotoItem
 import com.squareup.picasso.Callback
@@ -31,17 +34,11 @@ class HomePhotoAdapter(var photos: ArrayList<HomePhotoItem>) :
             Picasso.get()
                 .load(photo.urls.regular)
                 .placeholder(ColorDrawable(Color.parseColor(photo.color)))
-                .into(ivHomePhoto, object : Callback {
-                    override fun onSuccess() {
-                        if (photo.description != null) {
-                            tvHomePhotoTitle.text = photo.description
-                        }
-                    }
+                .into(ivHomePhoto)
 
-                    override fun onError(e: Exception?) {
-
-                    }
-                })
+            if (photo.description != null) {
+                tvHomePhotoTitle.text = photo.description
+            }
         }
     }
 
