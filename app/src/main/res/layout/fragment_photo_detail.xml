@@ -56,15 +56,6 @@
                             android:background="#1A000000">
 
                             <ImageView
-                                android:id="@+id/ivBack"
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_margin="16dp"
-                                android:src="@drawable/ic_back"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <ImageView
                                 android:id="@+id/ivMore"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
@@ -315,6 +306,15 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <ImageView
+        android:id="@+id/ivBack"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <include
         android:id="@+id/bottomSheetMore"

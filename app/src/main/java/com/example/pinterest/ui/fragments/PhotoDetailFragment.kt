@@ -2,6 +2,8 @@ package com.example.pinterest.ui.fragments
 
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Html
 import android.util.Log
@@ -21,6 +23,7 @@ import com.example.pinterest.R
 import com.example.pinterest.adapter.SearchPhotoAdapter
 import com.example.pinterest.database.Saved
 import com.example.pinterest.database.SavedDatabase
+import com.example.pinterest.helper.EndlessRecyclerViewScrollListener
 import com.example.pinterest.helper.SpaceItemDecoration
 import com.example.pinterest.model.homephoto.HomePhotoItem
 import com.example.pinterest.model.relatedcollection.SinglePhoto
@@ -56,7 +59,9 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnCli
     var relatedPhotoAdapter = SearchPhotoAdapter()
 
     private var PAGE = 1
+    private var PAGE_RELATED = 1
     private var PER_PAGE = 20
+    private var PER_PAGE_RELATED = 40
 
     private lateinit var bottomSheetLayout: CoordinatorLayout
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<CoordinatorLayout>
@@ -99,6 +104,12 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnCli
         ivShare = view.findViewById(R.id.ivShare)
         tvSave = view.findViewById(R.id.tvSave)
 
+        if (existInDatabase(imageID)) {
+            tvSave.text = "Saved!"
+            tvSave.setTextColor(Color.parseColor("#000000"))
+            tvSave.setBackgroundColor(Color.parseColor("#ffffff"))
+        }
+
         rvLikeThis = view.findViewById(R.id.rvLikeThis)
         staggeredGridLayoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
@@ -106,6 +117,7 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnCli
         rvLikeThis.addItemDecoration(SpaceItemDecoration(20))
         relatedPhotoAdapter = SearchPhotoAdapter()
         rvLikeThis.adapter = relatedPhotoAdapter
+
 
         getRelated()
         controlClick()
@@ -126,6 +138,11 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnCli
         savedDatabase = SavedDatabase.getInstance(requireContext())
     }
 
+    private fun existInDatabase(id: String): Boolean {
+        val savedDatabase = SavedDatabase.getInstance(requireContext())
+        return savedDatabase.savedDao().count(id) > 0
+    }
+
     private fun controlClick() {
         relatedPhotoAdapter.photoClick = {
             navController.navigate(
@@ -140,20 +157,21 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnCli
     }
 
     private fun getRelated() {
-        apiService.getImageToRelated(imageID).enqueue(object : Callback<SinglePhoto> {
-            override fun onResponse(call: Call<SinglePhoto>, response: Response<SinglePhoto>) {
-                val tags = response.body()!!.related_collections.results[0].tags
-                var query = ""
-                for (i in 0 until tags.size - 1)
-                    query += tags[i].title + " "
+        apiService.getImageToRelated(imageID, PAGE_RELATED, PER_PAGE_RELATED)
+            .enqueue(object : Callback<SinglePhoto> {
+                override fun onResponse(call: Call<SinglePhoto>, response: Response<SinglePhoto>) {
+                    val tags = response.body()!!.related_collections.results[0].tags
+                    var query = ""
+                    for (i in 0 until tags.size - 1)
+                        query += tags[i].title + " "
 
-                getSearchResults(query.trim())
-            }
+                    getSearchResults(query.trim())
+                }
 
-            override fun onFailure(call: Call<SinglePhoto>, t: Throwable) {
-                Log.d("TAG", "onFailure: ${t.localizedMessage}")
-            }
-        })
+                override fun onFailure(call: Call<SinglePhoto>, t: Throwable) {
+                    Log.d("TAG", "onFailure: ${t.localizedMessage}")
+                }
+            })
     }
 
     private fun getSearchResults(query: String) {
@@ -245,15 +263,29 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnCli
                 }
             }
             R.id.ivShare -> {
-
+                shareImageUrl(imageUrl)
             }
             R.id.tvSave -> {
                 savedToDatabase(imageID, imageUrl, imageDescription)
+                tvSave.setTextColor(Color.parseColor("#000000"))
+                tvSave.setBackgroundColor(Color.parseColor("#ffffff"))
             }
         }
     }
 
+    private fun shareImageUrl(imageUrl: String) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_TEXT, imageUrl)
+        startActivity(Intent.createChooser(intent, "Choose receiver"))
+    }
+
     private fun savedToDatabase(imageID: String, imageUrl: String, imageDescription: String) {
-        savedDatabase.savedDao().insertProduct(Saved(imageID, imageUrl, imageDescription))
+        if (imageDescription != "null") {
+            savedDatabase.savedDao().insertProduct(Saved(imageID, imageUrl, imageDescription))
+        } else {
+            savedDatabase.savedDao().insertProduct(Saved(imageID, imageUrl, ""))
+        }
+        Toast.makeText(requireContext(), "Saved", Toast.LENGTH_SHORT).show()
     }
 }

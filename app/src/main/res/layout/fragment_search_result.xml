@@ -16,6 +16,8 @@
         android:gravity="center">
 
         <EditText
+            android:paddingStart="12dp"
+
             android:id="@+id/edtSearch"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

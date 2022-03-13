@@ -29,7 +29,7 @@ class SavedPhotoAdapter() :
                 .load(photo.url)
                 .into(ivHomePhoto, object : Callback {
                     override fun onSuccess() {
-                        if (photo.description != null) {
+                        if (photo.description.isNotBlank()) {
                             tvHomePhotoTitle.text = photo.description
                         }
                     }

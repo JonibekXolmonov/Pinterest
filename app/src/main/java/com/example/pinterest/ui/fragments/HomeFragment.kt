@@ -30,7 +30,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var navController: NavController
 
     private var PAGE = 1
-    private var PER_PAGE = 20
+    private var PER_PAGE = 30
 
     private lateinit var list: ArrayList<HomePhotoItem>
 

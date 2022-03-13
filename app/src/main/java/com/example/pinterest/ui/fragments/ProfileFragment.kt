@@ -76,6 +76,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
         savedDatabase = SavedDatabase.getInstance(requireContext())
 
+        savedDatabase.savedDao().clearSaved()
+
         getSaved()
 
         controlClick()

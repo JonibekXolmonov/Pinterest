@@ -32,5 +32,9 @@ interface ApiService {
     fun getUser(@Path("username") username: String): Call<User>
 
     @GET("photos/{id}")
-    fun getImageToRelated(@Path("id") id: String): Call<SinglePhoto>
+    fun getImageToRelated(
+        @Path("id") id: String,
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int
+    ): Call<SinglePhoto>
 }

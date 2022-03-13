@@ -1,39 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.fragments.HomeFragment">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="0dp">
+        android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.Toolbar
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvHomeOption"
             android:layout_width="wrap_content"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#ffffff">
+            android:layout_height="match_parent"
+            android:background="#ffffff"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvHomeOption"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="#ffffff"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-        </androidx.appcompat.widget.Toolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+
         android:id="@+id/rvHomePhotos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="10dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:paddingVertical="10dp" />
 
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

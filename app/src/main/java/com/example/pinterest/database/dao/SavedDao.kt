@@ -13,4 +13,10 @@ interface SavedDao {
 
     @Query("SELECT * FROM Saved")
     fun getSaved(): List<Saved>
+
+    @Query("SELECT COUNT() FROM Saved WHERE savedID = :id")
+    fun count(id: String): Int
+
+    @Query("DELETE FROM Saved")
+    fun clearSaved()
 }

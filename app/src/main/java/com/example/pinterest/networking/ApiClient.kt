@@ -17,7 +17,6 @@ class ApiClient(var context: Context) {
     private val retrofit = getRetrofit(client)
 
 
-
     private fun getRetrofit(client: OkHttpClient): Retrofit {
 
         val chuckInterceptor = ChuckerInterceptor(context)
@@ -56,7 +55,10 @@ class ApiClient(var context: Context) {
             client.newBuilder().addInterceptor(Interceptor { chain ->
                 var request = chain.request()
                 val builder = request.newBuilder()
-                builder.addHeader("Authorization", "Client-ID 6nlmANUApAAm_Kqer-xedtHQ61JRnzuZD3AmBaHhjoQ")
+                builder.addHeader(
+                    "Authorization",
+                    "Client-ID 6nlmANUApAAm_Kqer-xedtHQ61JRnzuZD3AmBaHhjoQ"
+                )
                 request = builder.build()
                 chain.proceed(request)
             }).build()
