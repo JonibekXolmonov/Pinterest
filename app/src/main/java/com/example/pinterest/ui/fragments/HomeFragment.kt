@@ -9,6 +9,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.airbnb.lottie.model.content.BlurEffect
 import com.example.pinterest.R
 import com.example.pinterest.adapter.HomePhotoAdapter
 import com.example.pinterest.helper.EndlessRecyclerViewScrollListener

@@ -38,6 +38,7 @@ class SplashActivity : AppCompatActivity() {
                 while (true) {
                     if (!isInternetAvailable()) {
                         Log.d("TAG", "onAnimationEnd: no")
+                        lottieAnimationView.visibility = View.GONE
                         linearInternet.visibility = View.VISIBLE
                     } else {
                         Log.d("TAG", "onAnimationEnd: yes")

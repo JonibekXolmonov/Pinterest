@@ -1,6 +1,7 @@
 package com.example.pinterest.model.homephoto
 
 
+
 data class HomePhotoItem(
     val alt_description: Any,
     val blur_hash: String?,
@@ -9,5 +10,6 @@ data class HomePhotoItem(
     val description: String?,
     val id: String,
     val urls: Urls,
+    val links: Links,
     val user: User,
 )

@@ -32,7 +32,7 @@ class HomePhotoAdapter(var photos: ArrayList<HomePhotoItem>) :
             }
 
             Picasso.get()
-                .load(photo.urls.regular)
+                .load(photo.urls.thumb)
                 .placeholder(ColorDrawable(Color.parseColor(photo.color)))
                 .into(ivHomePhoto)
 

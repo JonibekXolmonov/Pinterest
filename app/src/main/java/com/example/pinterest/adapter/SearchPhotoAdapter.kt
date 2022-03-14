@@ -29,7 +29,7 @@ class SearchPhotoAdapter() :
             val tvHomePhotoTitle: TextView = view.findViewById(R.id.tvHomePhotoTitle)
 
             Picasso.get()
-                .load(photo.urls.regular)
+                .load(photo.urls.thumb)
                 .placeholder(ColorDrawable(Color.parseColor(photo.color)))
                 .into(ivHomePhoto, object : Callback {
                     override fun onSuccess() {

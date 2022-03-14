@@ -1,24 +1,42 @@
 package com.example.pinterest.ui.fragments
 
+import android.Manifest
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.ContentValues
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.text.Html
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.Nullable
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.pinterest.R
 import com.example.pinterest.adapter.SearchPhotoAdapter
 import com.example.pinterest.database.Saved
@@ -37,6 +55,9 @@ import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
 
 
 class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnClickListener {
@@ -53,6 +74,7 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnCli
     private lateinit var ivMore: ImageView
     private lateinit var ivShare: ImageView
     private lateinit var navController: NavController
+    private lateinit var nestedScrollView: NestedScrollView
 
     private lateinit var rvLikeThis: RecyclerView
     private lateinit var staggeredGridLayoutManager: StaggeredGridLayoutManager
@@ -61,7 +83,7 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnCli
     private var PAGE = 1
     private var PAGE_RELATED = 1
     private var PER_PAGE = 20
-    private var PER_PAGE_RELATED = 40
+    private var PER_PAGE_RELATED = 20
 
     private lateinit var bottomSheetLayout: CoordinatorLayout
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<CoordinatorLayout>
@@ -103,6 +125,7 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnCli
         ivMore = view.findViewById(R.id.ivMore)
         ivShare = view.findViewById(R.id.ivShare)
         tvSave = view.findViewById(R.id.tvSave)
+        nestedScrollView = view.findViewById(R.id.nestedScrollView)
 
         if (existInDatabase(imageID)) {
             tvSave.text = "Saved!"
@@ -120,6 +143,9 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnCli
 
 
         getRelated()
+
+        addLoadingMore()
+
         controlClick()
 
 
@@ -136,6 +162,16 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnCli
         controlBottomSheetAction(bottomSheetLayout)
 
         savedDatabase = SavedDatabase.getInstance(requireContext())
+    }
+
+    private fun addLoadingMore() {
+        nestedScrollView.setOnScrollChangeListener { v: NestedScrollView, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
+            if (v.getChildAt(v.childCount - 1) != null) {
+                if (scrollY >= v.getChildAt(v.childCount - 1).measuredHeight - v.measuredHeight && scrollY > oldScrollY) {
+                    getRelated()
+                }
+            }
+        }
     }
 
     private fun existInDatabase(id: String): Boolean {
@@ -200,17 +236,108 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnCli
 
         tvCopyLink.setOnClickListener {
             saveLinkToClipBoard(imageUrl)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             Toast.makeText(requireContext(), "Link copied", Toast.LENGTH_SHORT).show()
         }
 
         tvDownloadImage.setOnClickListener {
-            downLoadImage(imageUrl, imageName = imageID)
+            apiService.getSelectedPhoto(imageID).enqueue(object : Callback<HomePhotoItem> {
+                override fun onResponse(
+                    call: Call<HomePhotoItem>,
+                    response: Response<HomePhotoItem>
+                ) {
+                    if (isPermissionGranted()) {
+                        downLoadImage(response.body()!!.links.download, imageName = imageID)
+                    } else {
+                        getPermission()
+                        downLoadImage(response.body()!!.links.download, imageName = imageID)
+                    }
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                    Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
+                }
+
+                private fun getPermission() {
+                    val STORAGE_PERMISSIONS =
+                        arrayOf<String>(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    // If permission not granted then ask for permission real time.
+                    ActivityCompat.requestPermissions(requireActivity(), STORAGE_PERMISSIONS, 1)
+                }
+
+                private fun isPermissionGranted(): Boolean = ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED
+
+                override fun onFailure(call: Call<HomePhotoItem>, t: Throwable) {
+
+                }
+            })
         }
     }
 
-    private fun downLoadImage(imageUrl: String, imageName: String) {
+    private fun downLoadImage(imageURL: String?, imageName: String) {
+        Glide.with(this)
+            .load(imageURL)
+            .into(object : CustomTarget<Drawable?>() {
 
+                override fun onResourceReady(
+                    resource: Drawable,
+                    @Nullable transition: Transition<in Drawable?>?
+                ) {
+                    val bitmap = (resource as BitmapDrawable).bitmap
+
+                    saveImage(bitmap, imageName)
+                }
+
+                override fun onLoadCleared(@Nullable placeholder: Drawable?) {}
+            })
     }
+
+    private fun saveImage(image: Bitmap, imageFileName: String) {
+
+
+        //Generating a file name
+        val filename = "${imageFileName}.jpg"
+
+        //Output stream
+        var fos: OutputStream? = null
+
+//        For devices running android >= Q
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            //getting the contentResolver
+            context?.contentResolver?.also { resolver ->
+
+                //Content resolver will process the content values
+                val contentValues = ContentValues().apply {
+
+                    //putting file information in content values
+                    put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
+                    put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
+                    put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+                }
+
+                //Inserting the contentValues to contentResolver and getting the Uri
+                val imageUri: Uri? =
+                    resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+
+                //Opening an outputstream with the Uri that we got
+                fos = imageUri?.let { resolver.openOutputStream(it) }
+            }
+        } else {
+            //These for devices running on android < Q
+            //So I don't think an explanation is needed here
+            val imagesDir =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+            val image = File(imagesDir, filename)
+            fos = FileOutputStream(image)
+        }
+
+        fos?.use {
+            //Finally writing the bitmap to the output stream that we opened
+            image.compress(Bitmap.CompressFormat.JPEG, 100, it)
+        }
+    }
+
 
     private fun saveLinkToClipBoard(link: String) {
         val clipboard =
