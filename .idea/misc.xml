@@ -19,6 +19,7 @@
         <entry key="..\:/Users/User/AndroidStudioProjects/Pinterest/app/src/main/res/drawable/tab_indicator.xml" value="0.147" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Pinterest/app/src/main/res/drawable/textview_background.xml" value="0.147" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Pinterest/app/src/main/res/drawable/textview_background_red.xml" value="0.147" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Pinterest/app/src/main/res/drawable/textview_topic_background.xml" value="0.146" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Pinterest/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Pinterest/app/src/main/res/layout/activity_splash.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Pinterest/app/src/main/res/layout/bottom_sheet_more.xml" value="0.22" />
@@ -26,7 +27,7 @@
         <entry key="..\:/Users/User/AndroidStudioProjects/Pinterest/app/src/main/res/layout/fragment_chats.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Pinterest/app/src/main/res/layout/fragment_chats_message.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Pinterest/app/src/main/res/layout/fragment_chats_update.xml" value="0.20416666666666666" />
-        <entry key="..\:/Users/User/AndroidStudioProjects/Pinterest/app/src/main/res/layout/fragment_home.xml" value="0.25" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Pinterest/app/src/main/res/layout/fragment_home.xml" value="0.33" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Pinterest/app/src/main/res/layout/fragment_messages.xml" value="0.25" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Pinterest/app/src/main/res/layout/fragment_photo_detail.xml" value="0.25" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Pinterest/app/src/main/res/layout/fragment_profile.xml" value="0.22121896162528218" />
@@ -37,6 +38,7 @@
         <entry key="..\:/Users/User/AndroidStudioProjects/Pinterest/app/src/main/res/layout/item_home_photo.xml" value="0.2554067971163749" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Pinterest/app/src/main/res/layout/item_more_like.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Pinterest/app/src/main/res/layout/item_profile.xml" value="1.25" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Pinterest/app/src/main/res/layout/item_topic.xml" value="0.67" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Pinterest/app/src/main/res/menu/nav_menu.xml" value="0.20416666666666666" />
       </map>
     </option>

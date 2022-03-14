@@ -3,6 +3,7 @@ package com.example.pinterest.networking.services
 import com.example.pinterest.model.homephoto.HomePhotoItem
 import com.example.pinterest.model.relatedcollection.SinglePhoto
 import com.example.pinterest.model.search.ResponseSearch
+import com.example.pinterest.model.topic.Topic
 import com.example.pinterest.model.userprofile.User
 import retrofit2.Call
 import retrofit2.http.GET
@@ -37,4 +38,14 @@ interface ApiService {
         @Query("page") page: Int,
         @Query("per_page") perPage: Int
     ): Call<SinglePhoto>
+
+    @GET("topics")
+    fun getTopics(): Call<List<Topic>>
+
+    @GET("topics/{id}/photos")
+    fun getTopicPhotos(
+        @Path("id") id: String,
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int
+    ): Call<List<HomePhotoItem>>
 }

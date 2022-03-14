@@ -17,8 +17,10 @@ import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import java.lang.Exception
 
-class HomePhotoAdapter(var photos: ArrayList<HomePhotoItem>) :
+class HomePhotoAdapter() :
     RecyclerView.Adapter<HomePhotoAdapter.HomePhotoVH>() {
+
+    var photos: ArrayList<HomePhotoItem> = ArrayList()
 
     lateinit var photoClick: ((HomePhotoItem) -> Unit)
 
@@ -57,4 +59,9 @@ class HomePhotoAdapter(var photos: ArrayList<HomePhotoItem>) :
     private fun getItem(position: Int): HomePhotoItem = photos[position]
 
     override fun getItemCount(): Int = photos.size
+
+     fun submitData(list: List<HomePhotoItem>) {
+        photos.addAll(list)
+         notifyDataSetChanged()
+    }
 }
