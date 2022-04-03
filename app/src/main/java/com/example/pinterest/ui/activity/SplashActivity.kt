@@ -18,6 +18,7 @@ import com.example.pinterest.R
 class SplashActivity : AppCompatActivity() {
 
     private lateinit var linearInternet: LinearLayout
+    private lateinit var lottieAnimationView: LottieAnimationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -27,7 +28,7 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
         linearInternet = findViewById(R.id.linearInternet)
 
-        val lottieAnimationView = findViewById<LottieAnimationView>(R.id.lottie_layer_name)
+        lottieAnimationView = findViewById(R.id.lottie_layer_name)
         lottieAnimationView.playAnimation()
 
         lottieAnimationView.addAnimatorListener(object : Animator.AnimatorListener {
@@ -35,18 +36,7 @@ class SplashActivity : AppCompatActivity() {
             }
 
             override fun onAnimationEnd(animation: Animator?) {
-                while (true) {
-                    if (!isInternetAvailable()) {
-                        Log.d("TAG", "onAnimationEnd: no")
-                        lottieAnimationView.visibility = View.GONE
-                        linearInternet.visibility = View.VISIBLE
-                    } else {
-                        Log.d("TAG", "onAnimationEnd: yes")
-                        startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-                        finish()
-                        break
-                    }
-                }
+
             }
 
             override fun onAnimationCancel(animation: Animator?) {
@@ -55,6 +45,17 @@ class SplashActivity : AppCompatActivity() {
             override fun onAnimationRepeat(animation: Animator?) {
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isInternetAvailable()) {
+            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+            finish()
+        } else {
+            lottieAnimationView.visibility = View.GONE
+            linearInternet.visibility = View.VISIBLE
+        }
     }
 
     private fun isInternetAvailable(): Boolean {

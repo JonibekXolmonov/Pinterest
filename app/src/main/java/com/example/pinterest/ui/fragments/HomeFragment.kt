@@ -5,9 +5,11 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 
 import android.view.View
+import android.widget.ImageView
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.FragmentNavigator
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.pinterest.R
@@ -124,7 +126,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             override fun onResponse(call: Call<List<Topic>>, response: Response<List<Topic>>) {
                 Log.d("TAG", "onResponse: ${response.body()}")
                 if (response.body()!!.isNotEmpty())
-                topicAdapter.submitData(response.body()!!)
+                    topicAdapter.submitData(response.body()!!)
             }
 
             override fun onFailure(call: Call<List<Topic>>, t: Throwable) {
@@ -149,13 +151,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun controlItemClick() {
-        homePhotoAdapter.photoClick = {
+        homePhotoAdapter.photoClick = { homePhotoItem: HomePhotoItem ->
             navController.navigate(
                 R.id.action_homeFragment_to_photoDetailFragment,
                 bundleOf(
-                    "photoID" to it.id,
-                    "photoUrl" to it.urls.regular,
-                    "description" to it.description
+                    "photoID" to homePhotoItem.id,
+                    "photoUrl" to homePhotoItem.urls.regular,
+                    "description" to homePhotoItem.description
                 )
             )
         }

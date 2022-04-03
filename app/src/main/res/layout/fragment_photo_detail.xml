@@ -28,7 +28,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="10dp"
+                    android:paddingBottom="10dp"
                     android:orientation="vertical">
 
                     <FrameLayout
@@ -36,6 +36,7 @@
                         android:layout_height="wrap_content">
 
                         <com.jsibbold.zoomage.ZoomageView
+                            android:transitionName="image"
                             android:id="@+id/ivDetailPhoto"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -71,6 +72,7 @@
                     </FrameLayout>
 
                     <LinearLayout
+                        android:background="@color/mainWhite"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
@@ -120,13 +122,14 @@
                             android:background="@drawable/textview_background"
                             android:padding="10dp"
                             android:text="Follow"
-                            android:textColor="@color/black" />
+                            android:textColor="#000000" />
                     </LinearLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:background="@color/mainWhite"
                         android:padding="10dp">
 
                         <ImageView
@@ -139,6 +142,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <LinearLayout
+                            android:background="@color/mainWhite"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -152,9 +156,9 @@
                                 android:layout_marginEnd="4dp"
                                 android:background="@drawable/textview_background"
                                 android:padding="16dp"
-                                android:paddingHorizontal="4dp"
+                                android:paddingHorizontal="6dp"
                                 android:text="View"
-                                android:textColor="@color/black"
+                                android:textColor="#000000"
                                 android:textSize="16sp" />
 
                             <TextView
@@ -164,7 +168,7 @@
                                 android:layout_marginStart="4dp"
                                 android:background="@drawable/textview_background_red"
                                 android:padding="16dp"
-                                android:paddingHorizontal="4dp"
+                                android:paddingHorizontal="6dp"
                                 android:text="Save"
                                 android:textColor="@color/mainWhite"
                                 android:textSize="16sp" />
@@ -196,6 +200,7 @@
                 app:cardCornerRadius="20dp">
 
                 <LinearLayout
+                    android:background="@color/mainWhite"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
@@ -279,6 +284,7 @@
                 app:cardCornerRadius="20dp">
 
                 <LinearLayout
+                    android:background="@color/mainWhite"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"

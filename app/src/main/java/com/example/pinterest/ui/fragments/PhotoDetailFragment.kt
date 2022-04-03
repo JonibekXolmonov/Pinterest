@@ -17,7 +17,9 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.text.Html
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -100,6 +102,15 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnCli
         imageUrl = arguments?.get("photoUrl").toString()
         imageID = arguments?.get("photoID").toString()
         imageDescription = arguments?.get("description").toString()
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        sharedElementEnterTransition
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -377,10 +388,14 @@ class PhotoDetailFragment : Fragment(R.layout.fragment_photo_detail), View.OnCli
             })
     }
 
+    private fun onBackPressed(){
+        requireActivity().onBackPressed()
+    }
+
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.ivBack -> {
-                navController.navigate(R.id.action_photoDetailFragment_to_homeFragment)
+                onBackPressed()
             }
             R.id.ivMore -> {
                 if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {

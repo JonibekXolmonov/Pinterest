@@ -8,6 +8,7 @@
     tools:context=".ui.fragments.HomeFragment">
 
     <LinearLayout
+        android:background="@color/mainWhite"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -26,6 +27,7 @@
     <androidx.recyclerview.widget.RecyclerView
 
         android:id="@+id/rvHomePhotos"
+        android:background="@color/mainWhite"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="10dp" />
