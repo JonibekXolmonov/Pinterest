@@ -13,6 +13,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.lottie.LottieAnimationView
+import com.example.pinterest.DeepLink
 import com.example.pinterest.R
 import com.example.pinterest.receiver.InternetBroadcastReceiver
 
@@ -57,5 +58,8 @@ class SplashActivity : AppCompatActivity() {
 
             override fun onAnimationRepeat(animation: Animator?) {}
         })
+
+        DeepLink.createLongLink("12345")
+        DeepLink.createShortLink("12345")
     }
 }

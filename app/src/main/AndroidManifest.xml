@@ -18,7 +18,18 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustNothing">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="myphotoapp.page.link"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.activity.SplashActivity"
             android:exported="true">

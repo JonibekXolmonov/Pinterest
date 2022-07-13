@@ -6,6 +6,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
+import com.example.pinterest.DeepLink
 import com.example.pinterest.R
 import com.example.pinterest.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
@@ -37,6 +38,8 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         setupWithNavController(binding.bottomNavigation, navHostFragment.navController)
+
+        DeepLink.retrieveLink(intent)
 
     }
 }
